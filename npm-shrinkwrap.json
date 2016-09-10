@@ -1,6 +1,6 @@
 {
   "name": "consistent-observable",
-  "version": "4.3.1",
+  "version": "4.3.2",
   "dependencies": {
     "acorn": {
       "version": "3.3.0",
