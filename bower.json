@@ -26,6 +26,6 @@
     "src"
   ],
   "dependencies": {
-    "one-time-event": "git+ssh://git@drubn.de/one-time-event#~3.0.3"
+    "one-time-event": "^4.1.0"
   }
 }

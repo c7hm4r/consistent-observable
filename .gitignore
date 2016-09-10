@@ -46,3 +46,5 @@ Thumbs.db
 # Build
 build
 bower_components/
+
+*.bak
