@@ -16,7 +16,7 @@
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  exports.isObservable = exports.inTransition = exports.newComputed = exports.ComputedObservable = exports.newAction = exports.Action = exports.addROWrapper = exports.newROWrapper = exports.ROWrapper = exports.newIndependent = exports.IndependentObservable = exports.defaultEquals = undefined;
+  exports.isObservable = exports.inTransition = exports.newTransition = exports.newComputed = exports.ComputedObservable = exports.newAction = exports.Action = exports.addROWrapper = exports.newROWrapper = exports.ROWrapper = exports.newIndependent = exports.IndependentObservable = exports.defaultEquals = undefined;
 
   function _possibleConstructorReturn(self, call) {
     if (!self) {
@@ -542,16 +542,20 @@
     return new ComputedObservable(calculation, cleanup);
   };
 
+  var newTransition = exports.newTransition = function newTransition(transitionEndedPub) {
+    return {
+      ended: transitionEndedPub
+    };
+  };
+
   var inTransition = exports.inTransition = function inTransition(operation, parentTransition) {
     if (parentTransition) {
       return operation(parentTransition);
     }
 
     var transitionEnded = (0, _oneTimeEvent.newOneTimeEvent)();
+    var transition = newTransition(transitionEnded.pub);
 
-    var transition = {
-      ended: transitionEnded.pub
-    };
     var result = void 0;
     try {
       result = operation(transition);

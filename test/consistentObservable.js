@@ -1,6 +1,7 @@
 import test from 'tape';
 
 import * as co from '../src/lib/consistentObservable.js';
+import { newOneTimeEvent } from 'one-time-event';
 
 /* eslint no-magic-numbers: "off" */
 
@@ -458,4 +459,21 @@ test('addROWrapper', (t) => {
   t.equals(j.pub.peek(), 1);
   t.notOk(j.pub.set);
   t.end();
+});
+
+test('transition exposed', (t) => {
+  t.plan(2);
+  const j = co.newIndependent(1);
+  co.newAction((r) => {
+    r(j);
+    t.pass();
+  });
+
+  const transitionEnded = newOneTimeEvent();
+  const transition = co.newTransition(transitionEnded.pub);
+
+  setTimeout(() => {
+    transitionEnded.fire();
+  });
+  j.set(2, transition);
 });

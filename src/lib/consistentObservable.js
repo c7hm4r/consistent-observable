@@ -265,16 +265,20 @@ export const newComputed = (calculation, cleanup) => {
   return new ComputedObservable(calculation, cleanup);
 };
 
+export const newTransition = (transitionEndedPub) => {
+  return {
+    ended: transitionEndedPub
+  };
+};
+
 export const inTransition = (operation, parentTransition) => {
   if (parentTransition) {
     return operation(parentTransition);
   }
 
   const transitionEnded = newOneTimeEvent();
+  const transition = newTransition(transitionEnded.pub);
 
-  const transition = {
-    ended: transitionEnded.pub
-  };
   let result;
   try {
     result = operation(transition);
