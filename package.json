@@ -49,7 +49,7 @@
     "check": "parallelshell 'npm run audit' 'npm outdated --depth 0' && echo '✔ all success'",
     "prepare": "npm run validate && npm run check && echo '✔ all success'",
     "preversion": "npm run prepare && node -e \"let rl = require('readline').createInterface({input: process.stdin, output: process.stdout}); rl.question('Ok? (type yes) ', (answer) => process.exit(answer === 'yes' ? 0 : 1))\"",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags && npm publish"
   },
   "author": {
     "name": "Christoph Müller",
