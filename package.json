@@ -39,7 +39,7 @@
     "coverage:watch": "onchange '{src,test}/**/*.js' -i -- npm run coverage",
     "lint": "eslint src test",
     "lint:watch": "onchange '{src,test}/**/*.js' -i -- npm run lint -loglevel silent",
-    "update-dependencies": "npm prune && npm install",
+    "update-dependencies": "shx mv npm-shrinkwrap.json npm-shrinkwrap.no-dev.json && shx cp npm-shrinkwrap.dev.json npm-shrinkwrap.json && npm install && npm prune && shx mv npm-shrinkwrap.no-dev.json npm-shrinkwrap.json",
     "validate": "npm run update-dependencies && parallelshell 'npm run lint' 'npm run test' && echo '✔ all success'",
     "validate:pretty": "parallelshell 'npm run lint' 'npm run test:pretty' && echo '✔ all success\\a' || (echo '✘ some error\\a'; sleep 0.2; echo '\\a')",
     "validate:watch": "onchange '{src,test}/**/*.js' -i -- npm run validate -loglevel silent",
@@ -48,7 +48,7 @@
     "audit": "nsp check package",
     "check": "parallelshell 'npm run audit' 'npm outdated --depth 0' && echo '✔ all success'",
     "prepare": "npm run validate && npm run check && echo '✔ all success'",
-    "preversion": "npm run prepare && node -e \"let rl = require('readline').createInterface({input: process.stdin, output: process.stdout}); rl.question('Ok? (type yes) ', (answer) => process.exit(answer === 'yes' ? 0 : 1))\"",
+    "preversion": "npm run prepare && git diff && node -e \"let rl = require('readline').createInterface({input: process.stdin, output: process.stdout}); rl.question('Ok? (type yes) ', (answer) => process.exit(answer === 'yes' ? 0 : 1))\"",
     "postversion": "git push && git push --tags && npm publish"
   },
   "author": {
