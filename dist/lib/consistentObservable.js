@@ -205,7 +205,7 @@
     function Action(action /* (recorder) */
     , cleanup /* (isFinal) */
     ) {
-      var runAutomatically = arguments.length <= 2 || arguments[2] === undefined ? true : arguments[2];
+      var runAutomatically = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
 
       _classCallCheck(this, Action);
 

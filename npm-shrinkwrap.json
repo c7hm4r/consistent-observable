@@ -3,9 +3,9 @@
   "version": "4.4.1",
   "dependencies": {
     "one-time-event": {
-      "version": "4.1.9",
-      "from": "one-time-event@>=4.1.0 <5.0.0",
-      "resolved": "https://registry.npmjs.org/one-time-event/-/one-time-event-4.1.9.tgz"
+      "version": "4.1.10",
+      "from": "one-time-event@4.1.10",
+      "resolved": "https://registry.npmjs.org/one-time-event/-/one-time-event-4.1.10.tgz"
     }
   }
 }
