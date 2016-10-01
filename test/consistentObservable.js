@@ -347,27 +347,34 @@ test('ComputedObservable: depending Actions are invoked', (t) => {
   co.inTransition((tr) => i.set(0, tr));
 });
 
-const nitpicker = () => {
+const newNitpicker = () => {
   let ordered = 0;
+  let orderedValue;
   const result = {
-    once: (operation) => {
+    once: (operation, value) => {
       const previous = ordered;
-      result.order();
+      result.order(value);
       operation();
       if (previous !== ordered) {
         throw new Error('tick ordered, but not performed (or too often)');
       }
     },
-    tick: () => {
+    tick: (value) => {
       if (ordered <= 0) {
         throw new Error('tick not allowed');
       }
+      if (orderedValue !== value) {
+        throw new Error('wrong value');
+      }
       ordered--;
     },
-    done: () => {
+    isDone: () => {
       return ordered === 0;
     },
-    order: () => ++ordered
+    order: (value) => {
+      ++ordered;
+      orderedValue = value;
+    }
   };
   return result;
 };
@@ -381,14 +388,14 @@ test('ComputedObservable: cleanup', (t) => {
 });
 
 test('ComputedObservable: Invalidate forces run on next access', (t) => {
-  const calculationCounter = nitpicker();
-  const cleanupCounter = nitpicker();
+  const calculationCounter = newNitpicker();
+  const cleanupCounter = newNitpicker();
 
   const j = co.newIndependent(1);
   const ob = co.newComputed((r) => {
     r(j);
     calculationCounter.tick();
-  }, cleanupCounter.tick);
+  }, () => cleanupCounter.tick());
 
   co.inTransition((tr) => {
     ob.invalidate(tr);
@@ -419,8 +426,8 @@ test('ComputedObservable: Invalidate forces run on next access', (t) => {
     cleanupCounter.order();
     calculationCounter.order();
   });
-  t.ok(cleanupCounter.done());
-  t.ok(calculationCounter.done());
+  t.ok(cleanupCounter.isDone());
+  t.ok(calculationCounter.isDone());
 
   t.end();
 });
@@ -476,4 +483,25 @@ test('transition exposed', (t) => {
     transitionEnded.fire();
   });
   j.set(2, transition);
+});
+
+test('isFinal parameter', (t) => {
+  const isFinalPicker = newNitpicker();
+
+  const j = co.newIndependent(1);
+  const c = co.newComputed(
+    (r) => r(j),
+    (isFinal) => isFinalPicker.tick(isFinal));
+
+  c.update();
+  co.inTransition((tr) => {
+    j.set(0, tr);
+  });
+  isFinalPicker.once(() => {
+    c.update();
+  }, false);
+  isFinalPicker.once(() => {
+    c.close();
+  }, true);
+  t.end();
 });

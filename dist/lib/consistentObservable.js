@@ -202,7 +202,9 @@
   };
 
   var Action = exports.Action = function () {
-    function Action(action, cleanup) {
+    function Action(action /* (recorder) */
+    , cleanup /* (isFinal) */
+    ) {
       var runAutomatically = arguments.length <= 2 || arguments[2] === undefined ? true : arguments[2];
 
       _classCallCheck(this, Action);
@@ -237,7 +239,7 @@
     _createClass(Action, [{
       key: 'run',
       value: function run() {
-        this.close();
+        this._close(false);
         this._action(this._recordHandler);
         this._clean = false;
         this._invalidated = false;
@@ -292,8 +294,12 @@
     }, {
       key: 'close',
       value: function close() {
+        this._close(true);
+      }
+    }, {
+      key: '_close',
+      value: function _close(isFinal) {
         if (!this._clean) {
-          this._clean = true;
           this._hasBaseChanged = true;
           var _iteratorNormalCompletion2 = true;
           var _didIteratorError2 = false;
@@ -326,7 +332,10 @@
           }
 
           if (this._cleanup) {
-            this._cleanup();
+            this._cleanup(isFinal);
+          }
+          if (isFinal) {
+            this._clean = true;
           }
         }
       }

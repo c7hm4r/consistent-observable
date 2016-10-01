@@ -76,7 +76,10 @@ export const addROWrapper = (baseObservable) => {
 };
 
 export class Action {
-  constructor(action, cleanup, runAutomatically = true) {
+  constructor(
+      action /* (recorder) */,
+      cleanup /* (isFinal) */,
+      runAutomatically = true) {
     this._cleanup = cleanup;
     this._action = action;
     this._runAutomatically = runAutomatically;
@@ -106,7 +109,7 @@ export class Action {
   }
 
   run() {
-    this.close();
+    this._close(false);
     this._action(this._recordHandler);
     this._clean = false;
     this._invalidated = false;
@@ -132,8 +135,11 @@ export class Action {
   }
 
   close() {
+    this._close(true);
+  }
+
+  _close(isFinal) {
     if (!this._clean) {
-      this._clean = true;
       this._hasBaseChanged = true;
       for (const [dependency, dependencyInfo] of this._dependencyInfos) {
         dependency.baseChanged.removeHandler(this._baseChangedHandler);
@@ -141,7 +147,10 @@ export class Action {
         dependencyInfo.equalss.clear();
       }
       if (this._cleanup) {
-        this._cleanup();
+        this._cleanup(isFinal);
+      }
+      if (isFinal) {
+        this._clean = true;
       }
     }
   }
