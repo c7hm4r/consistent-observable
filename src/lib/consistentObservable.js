@@ -298,6 +298,6 @@ export const inTransition = (operation, parentTransition) => {
 };
 
 export const isObservable = (observable) => {
-  return observable.transitionEnded &&
+  return observable && observable.transitionEnded &&
       observable.peek && observable.baseChanged;
 };

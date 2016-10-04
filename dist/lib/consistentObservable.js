@@ -575,7 +575,7 @@
   };
 
   var isObservable = exports.isObservable = function isObservable(observable) {
-    return observable.transitionEnded && observable.peek && observable.baseChanged;
+    return observable && observable.transitionEnded && observable.peek && observable.baseChanged;
   };
 });
 //# sourceMappingURL=consistentObservable.js.map

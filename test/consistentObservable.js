@@ -204,6 +204,7 @@ test('isObservable detects only observables', (t) => {
   t.ok(co.isObservable(new co.ComputedObservable(() => { /* do nothing */ })));
   t.notOk(co.isObservable(new co.Action(() => { /* do nothing */ })));
   t.notOk(co.isObservable({}));
+  t.notOk(co.isObservable(void 0));
   t.end();
 });
 
