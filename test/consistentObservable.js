@@ -25,7 +25,7 @@ test('IndependentObservable: when set then baseChanged', (t) => {
   t.end();
 });
 
-test('IndependentObservable: Set autoside transition fails', (t) => {
+test('IndependentObservable: Set outside transition fails', (t) => {
   t.plan(1);
   try {
     i.set(4);
