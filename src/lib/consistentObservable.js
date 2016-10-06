@@ -149,9 +149,7 @@ export class Action {
       if (this._cleanup) {
         this._cleanup(isFinal);
       }
-      if (isFinal) {
-        this._clean = true;
-      }
+      this._clean = true;
     }
   }
 
