@@ -506,3 +506,36 @@ test('isFinal parameter', (t) => {
   }, true);
   t.end();
 });
+
+test('Cannot pull away transition event', (t) => {
+  const j = co.newIndependent(0);
+  const c = co.newComputed((r) => r(j) + 1);
+  let valueA, valueA1;
+  const a = co.newAction((r) => { valueA = r(j) + r(c); });
+  const a1 = co.newAction((r) => { valueA1 = r(c); });
+
+  co.inTransition((tr) => {
+    j.set(1, tr);
+  });
+  t.equals(valueA, 3);
+  t.equals(c.peek(), 2);
+  t.equals(valueA1, 2);
+  a.close();
+  a1.close();
+  t.end();
+});
+
+test('Cannot pull away transition event II', (t) => {
+  const j = co.newIndependent(0);
+  const c = co.newComputed((r) => r(j) + 1);
+  let valueA;
+  co.newAction((r) => { valueA = r(c); });
+
+  co.inTransition((tr) => {
+    j.set(1, tr);
+    c.peek();
+  });
+  t.equals(c.peek(), 2);
+  t.equals(valueA, 2);
+  t.end();
+});
