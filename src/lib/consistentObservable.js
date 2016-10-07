@@ -103,34 +103,43 @@ export class Action {
 
     this._invalidated = false;
 
+    this._runAfterLastTransition = false;
+    this._runTwiceAfterLastTransition = false;
+
     if (this._runAutomatically) {
       this.run();
     }
   }
 
   run() {
+    if (this._runAfterLastTransition) {
+      this._runTwiceAfterLastTransition = true;
+    } else {
+      this._runAfterLastTransition = true;
+    }
     this._close(false);
     this._action(this._recordHandler);
     this._clean = false;
     this._invalidated = false;
     this._hasBaseChanged = false;
+    for (const [dependency, dependencyInfo] of this._dependencyInfos) {
+      if (dependencyInfo.equalss.size === 0) {
+        this._dependencyInfos.delete(dependency);
+      }
+    }
   }
 
   /* runs the action,
    * if its computation is not in concert with its dependencies */
   update() {
-    if (this._hasBaseChanged) {
-      if (this._invalidated || this._clean || this._hasDependencyChanged()) {
-        this.run();
-        for (const [dependency, dependencyInfo] of this._dependencyInfos) {
-          if (dependencyInfo.equalss.size === 0) {
-            this._dependencyInfos.delete(dependency);
-          }
-        }
-        return true;
-      }
-      this._hasBaseChanged = false;
+    if (!this._hasBaseChanged) {
+      return false;
     }
+    if (this._invalidated || this._clean || this._hasDependencyChanged()) {
+      this.run();
+      return true;
+    }
+    this._hasBaseChanged = false;
     return false;
   }
 
@@ -204,13 +213,16 @@ export class Action {
     if (dependency) {
       const dependencyInfo = this._dependencyInfos.get(dependency);
       const currentValue = dependency.peek();
-      if (!Action._hasSingleDependencyChanged(dependencyInfo, currentValue)) {
+      if (!this._runTwiceAfterLastTransition &&
+          !Action._hasSingleDependencyChanged(dependencyInfo, currentValue)) {
         dependencyInfo.baseChanged = false;
         dependency.baseChanged.addHandler(this._baseChangedHandler);
         dependency.transitionEnded.addHandler(this._transitionEndedHandler);
         return;
       }
     }
+    this._runAfterLastTransition = false;
+    this._runTwiceAfterLastTransition = false;
     if (this._runAutomatically) {
       this.run();
     }

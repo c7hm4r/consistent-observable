@@ -231,6 +231,9 @@
 
       this._invalidated = false;
 
+      this._runAfterLastTransition = false;
+      this._runTwiceAfterLastTransition = false;
+
       if (this._runAutomatically) {
         this.run();
       }
@@ -239,11 +242,45 @@
     _createClass(Action, [{
       key: 'run',
       value: function run() {
+        if (this._runAfterLastTransition) {
+          this._runTwiceAfterLastTransition = true;
+        } else {
+          this._runAfterLastTransition = true;
+        }
         this._close(false);
         this._action(this._recordHandler);
         this._clean = false;
         this._invalidated = false;
         this._hasBaseChanged = false;
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+          for (var _iterator = this._dependencyInfos[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var _step$value = _slicedToArray(_step.value, 2);
+
+            var dependency = _step$value[0];
+            var dependencyInfo = _step$value[1];
+
+            if (dependencyInfo.equalss.size === 0) {
+              this._dependencyInfos.delete(dependency);
+            }
+          }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+              _iterator.return();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
+          }
+        }
       }
 
       /* runs the action,
@@ -252,43 +289,14 @@
     }, {
       key: 'update',
       value: function update() {
-        if (this._hasBaseChanged) {
-          if (this._invalidated || this._clean || this._hasDependencyChanged()) {
-            this.run();
-            var _iteratorNormalCompletion = true;
-            var _didIteratorError = false;
-            var _iteratorError = undefined;
-
-            try {
-              for (var _iterator = this._dependencyInfos[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                var _step$value = _slicedToArray(_step.value, 2);
-
-                var dependency = _step$value[0];
-                var dependencyInfo = _step$value[1];
-
-                if (dependencyInfo.equalss.size === 0) {
-                  this._dependencyInfos.delete(dependency);
-                }
-              }
-            } catch (err) {
-              _didIteratorError = true;
-              _iteratorError = err;
-            } finally {
-              try {
-                if (!_iteratorNormalCompletion && _iterator.return) {
-                  _iterator.return();
-                }
-              } finally {
-                if (_didIteratorError) {
-                  throw _iteratorError;
-                }
-              }
-            }
-
-            return true;
-          }
-          this._hasBaseChanged = false;
+        if (!this._hasBaseChanged) {
+          return false;
         }
+        if (this._invalidated || this._clean || this._hasDependencyChanged()) {
+          this.run();
+          return true;
+        }
+        this._hasBaseChanged = false;
         return false;
       }
     }, {
@@ -443,13 +451,15 @@
         if (dependency) {
           var dependencyInfo = this._dependencyInfos.get(dependency);
           var currentValue = dependency.peek();
-          if (!Action._hasSingleDependencyChanged(dependencyInfo, currentValue)) {
+          if (!this._runTwiceAfterLastTransition && !Action._hasSingleDependencyChanged(dependencyInfo, currentValue)) {
             dependencyInfo.baseChanged = false;
             dependency.baseChanged.addHandler(this._baseChangedHandler);
             dependency.transitionEnded.addHandler(this._transitionEndedHandler);
             return;
           }
         }
+        this._runAfterLastTransition = false;
+        this._runTwiceAfterLastTransition = false;
         if (this._runAutomatically) {
           this.run();
         }
