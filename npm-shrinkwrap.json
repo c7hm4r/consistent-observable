@@ -1,6 +1,6 @@
 {
   "name": "consistent-observable",
-  "version": "4.5.2",
+  "version": "4.5.3",
   "dependencies": {
     "one-time-event": {
       "version": "4.1.10",
