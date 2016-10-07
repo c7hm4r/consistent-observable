@@ -348,7 +348,7 @@ test('ComputedObservable: depending Actions are invoked', (t) => {
   co.inTransition((tr) => i.set(0, tr));
 });
 
-const newNitpicker = () => {
+function newNitpicker() {
   let ordered = 0;
   let orderedValue;
   const result = {
@@ -378,7 +378,7 @@ const newNitpicker = () => {
     }
   };
   return result;
-};
+}
 
 test('ComputedObservable: cleanup', (t) => {
   t.plan(1);
@@ -537,5 +537,36 @@ test('Cannot pull away transition event II', (t) => {
   });
   t.equals(c.peek(), 2);
   t.equals(valueA, 2);
+  t.end();
+});
+
+test('Inner nested action not run after abandonment', (t) => {
+  const b = co.newIndependent(true);
+  const b1 = co.newIndependent(true);
+  const n = newNitpicker();
+  const nClose = newNitpicker();
+  let a = null;
+  n.once(() => {
+    co.newAction((r) => {
+      if (r(b1)) {
+        a = co.newAction((r1) => {
+          r1(b);
+          n.tick();
+        }, () => {
+          nClose.tick();
+        });
+      }
+    }, () => {
+      if (a) {
+        a.close();
+      }
+    });
+  });
+  co.inTransition((tr) => {
+    b.set(false, tr);
+    b1.set(false, tr);
+    nClose.order();
+  });
+  t.ok(nClose.isDone());
   t.end();
 });
