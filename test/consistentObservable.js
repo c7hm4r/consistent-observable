@@ -480,8 +480,14 @@ test('transition exposed', (t) => {
   const transitionEnded = newOneTimeEvent();
   const transition = co.newTransition(transitionEnded.pub);
 
+  const rerunSignal = newOneTimeEvent();
+
+  /* Keine gute Idee,
+   * weil dann im Browser ein Bild
+   * mit veralteten Informationen gerendert wird. */
   setTimeout(() => {
-    transitionEnded.fire();
+    transitionEnded.fire(null, rerunSignal.pub);
+    rerunSignal.fire();
   });
   j.set(2, transition);
 });
@@ -568,5 +574,12 @@ test('Inner nested action not run after abandonment', (t) => {
     nClose.order();
   });
   t.ok(nClose.isDone());
+  t.end();
+});
+
+test('reruning a finally closed action throws an error', (t) => {
+  const a = co.newAction(() => { /* nothing */ });
+  a.close();
+  t.throws(() => a.run());
   t.end();
 });

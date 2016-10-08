@@ -34,8 +34,8 @@ export class IndependentObservable {
     this._baseChanged.fire(this);
   }
 
-  _handleTransitionEnd() {
-    this._transitionEnded.fire(this);
+  _handleTransitionEnd(_, rerunSignal) {
+    this._transitionEnded.fire(this, rerunSignal);
   }
 }
 
@@ -56,8 +56,9 @@ export class ROWrapper {
     this._transitionEnded = newOneTimeEvent(() =>
       this._baseObservable.transitionEnded.addHandler(
         this._transitionEndedHandler));
-    this._transitionEndedHandler =
-      this._transitionEnded.fire.bind(this._transitionEnded, this);
+    this._transitionEndedHandler = (dependency, rerunSignal) => {
+      this._transitionEnded.fire(this, rerunSignal);
+    };
     this.transitionEnded = this._transitionEnded.pub;
   }
 
@@ -92,14 +93,17 @@ export class Action {
 
     this._transitionEnded = newOneTimeEvent(
         this._startListeningForTransitionEnd.bind(this));
-    this._transitionEndedHandler = this._handleTransitionEnd.bind(this);
     this.transitionEnded = this._transitionEnded.pub;
+    this._transitionEndedHandler = this._handleTransitionEnd.bind(this);
+
+    this._rerunSignalHandler = this._handleRerunSignal.bind(this);
 
     this._dependencyInfos = new Map(); // dependency → dependencyInfo
 
     this._recordHandler = this._record.bind(this);
 
     this._clean = true;
+    this._isFinallyClosed = false;
 
     this._invalidated = false;
 
@@ -112,6 +116,9 @@ export class Action {
   }
 
   run() {
+    if (this._isFinallyClosed) {
+      throw new Error('already finally closed');
+    }
     if (this._runAfterLastTransition) {
       this._runTwiceAfterLastTransition = true;
     } else {
@@ -159,6 +166,9 @@ export class Action {
         this._cleanup(isFinal);
       }
       this._clean = true;
+    }
+    if (isFinal) {
+      this._isFinallyClosed = true;
     }
   }
 
@@ -209,7 +219,7 @@ export class Action {
     }
   }
 
-  _handleTransitionEnd(dependency) {
+  _handleTransitionEnd(dependency, rerunSignal) {
     if (dependency) {
       const dependencyInfo = this._dependencyInfos.get(dependency);
       const currentValue = dependency.peek();
@@ -223,10 +233,16 @@ export class Action {
     }
     this._runAfterLastTransition = false;
     this._runTwiceAfterLastTransition = false;
-    if (this._runAutomatically) {
+    this._close(false);
+
+    rerunSignal.addHandler(this._rerunSignalHandler);
+    this._transitionEnded.fire(this, rerunSignal);
+  }
+
+  _handleRerunSignal() {
+    if (this._runAutomatically && !this._isFinallyClosed) {
       this.run();
     }
-    this._transitionEnded.fire(this);
   }
 
   _record(dependency, equals) {
@@ -298,11 +314,14 @@ export const inTransition = (operation, parentTransition) => {
   const transitionEnded = newOneTimeEvent();
   const transition = newTransition(transitionEnded.pub);
 
+  const rerunSignal = newOneTimeEvent();
+
   let result;
   try {
     result = operation(transition);
   } finally {
-    transitionEnded.fire();
+    transitionEnded.fire(null, rerunSignal.pub);
+    rerunSignal.fire();
   }
   return result;
 };

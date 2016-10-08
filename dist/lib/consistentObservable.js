@@ -144,8 +144,8 @@
       }
     }, {
       key: '_handleTransitionEnd',
-      value: function _handleTransitionEnd() {
-        this._transitionEnded.fire(this);
+      value: function _handleTransitionEnd(_, rerunSignal) {
+        this._transitionEnded.fire(this, rerunSignal);
       }
     }]);
 
@@ -173,7 +173,9 @@
       this._transitionEnded = (0, _oneTimeEvent.newOneTimeEvent)(function () {
         return _this._baseObservable.transitionEnded.addHandler(_this._transitionEndedHandler);
       });
-      this._transitionEndedHandler = this._transitionEnded.fire.bind(this._transitionEnded, this);
+      this._transitionEndedHandler = function (dependency, rerunSignal) {
+        _this._transitionEnded.fire(_this, rerunSignal);
+      };
       this.transitionEnded = this._transitionEnded.pub;
     }
 
@@ -220,14 +222,17 @@
       this._baseChangedHandler = this._handleDependencyBaseChanged.bind(this);
 
       this._transitionEnded = (0, _oneTimeEvent.newOneTimeEvent)(this._startListeningForTransitionEnd.bind(this));
-      this._transitionEndedHandler = this._handleTransitionEnd.bind(this);
       this.transitionEnded = this._transitionEnded.pub;
+      this._transitionEndedHandler = this._handleTransitionEnd.bind(this);
+
+      this._rerunSignalHandler = this._handleRerunSignal.bind(this);
 
       this._dependencyInfos = new Map(); // dependency → dependencyInfo
 
       this._recordHandler = this._record.bind(this);
 
       this._clean = true;
+      this._isFinallyClosed = false;
 
       this._invalidated = false;
 
@@ -242,6 +247,9 @@
     _createClass(Action, [{
       key: 'run',
       value: function run() {
+        if (this._isFinallyClosed) {
+          throw new Error('already finally closed');
+        }
         if (this._runAfterLastTransition) {
           this._runTwiceAfterLastTransition = true;
         } else {
@@ -343,6 +351,9 @@
             this._cleanup(isFinal);
           }
           this._clean = true;
+        }
+        if (isFinal) {
+          this._isFinallyClosed = true;
         }
       }
 
@@ -447,7 +458,7 @@
       }
     }, {
       key: '_handleTransitionEnd',
-      value: function _handleTransitionEnd(dependency) {
+      value: function _handleTransitionEnd(dependency, rerunSignal) {
         if (dependency) {
           var dependencyInfo = this._dependencyInfos.get(dependency);
           var currentValue = dependency.peek();
@@ -460,10 +471,17 @@
         }
         this._runAfterLastTransition = false;
         this._runTwiceAfterLastTransition = false;
-        if (this._runAutomatically) {
+        this._close(false);
+
+        rerunSignal.addHandler(this._rerunSignalHandler);
+        this._transitionEnded.fire(this, rerunSignal);
+      }
+    }, {
+      key: '_handleRerunSignal',
+      value: function _handleRerunSignal() {
+        if (this._runAutomatically && !this._isFinallyClosed) {
           this.run();
         }
-        this._transitionEnded.fire(this);
       }
     }, {
       key: '_record',
@@ -573,11 +591,14 @@
     var transitionEnded = (0, _oneTimeEvent.newOneTimeEvent)();
     var transition = newTransition(transitionEnded.pub);
 
+    var rerunSignal = (0, _oneTimeEvent.newOneTimeEvent)();
+
     var result = void 0;
     try {
       result = operation(transition);
     } finally {
-      transitionEnded.fire();
+      transitionEnded.fire(null, rerunSignal.pub);
+      rerunSignal.fire();
     }
     return result;
   };
