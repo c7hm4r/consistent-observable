@@ -222,6 +222,13 @@ export class Action {
   _handleTransitionEnd(dependency, rerunSignal) {
     if (dependency) {
       const dependencyInfo = this._dependencyInfos.get(dependency);
+      if (!dependencyInfo) {
+        return;
+        /* may happen when transitionEnded event processing of dependency
+         * is in progress, as part of that has already triggered
+         * a rerun of `this` and dependency is not necessary anymore for
+         * `this`. */
+      }
       const currentValue = dependency.peek();
       if (!this._runTwiceAfterLastTransition &&
           !Action._hasSingleDependencyChanged(dependencyInfo, currentValue)) {
