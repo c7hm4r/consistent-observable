@@ -25,6 +25,6 @@
     "src"
   ],
   "dependencies": {
-    "one-time-event": "^4.1.0"
+    "one-time-event": "^5.0.0"
   }
 }

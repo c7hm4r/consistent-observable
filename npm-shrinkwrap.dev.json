@@ -1,6 +1,6 @@
 {
   "name": "consistent-observable",
-  "version": "4.5.3",
+  "version": "5.0.0",
   "dependencies": {
     "acorn": {
       "version": "4.0.3",
@@ -4266,9 +4266,9 @@
       "resolved": "https://registry.npmjs.org/onchange/-/onchange-3.0.2.tgz"
     },
     "one-time-event": {
-      "version": "4.1.11",
-      "from": "one-time-event@>=4.1.0 <5.0.0",
-      "resolved": "https://registry.npmjs.org/one-time-event/-/one-time-event-4.1.11.tgz"
+      "version": "5.0.0",
+      "from": "one-time-event@>=5.0.0 <6.0.0",
+      "resolved": "https://registry.npmjs.org/one-time-event/-/one-time-event-5.0.0.tgz"
     },
     "onetime": {
       "version": "1.1.0",

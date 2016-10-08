@@ -26,7 +26,7 @@ export class IndependentObservable {
       throw new Error('Can only set inside a transition.');
     }
     this._value = newValue;
-    if (!this._transitionEnded.isEmpty) {
+    if (!this._transitionEnded.isEmpty()) {
       /* [A] hidden feature: _transitionEnded
        * is not registered in transition when handlers registered after set */
       transition.ended.addHandler(this._transitionEndedHandler);
@@ -179,7 +179,7 @@ export class Action {
     }
     this._invalidated = true;
     // see [A]
-    if (!this._transitionEnded.isEmpty) {
+    if (!this._transitionEnded.isEmpty()) {
       transition.ended.addHandler(this._transitionEndedHandler);
     }
     this._enableBaseChanged();
@@ -257,7 +257,7 @@ export class Action {
     }
     if (dependencyInfo.equalss.size === 0) {
       dependency.baseChanged.addHandler(this._baseChangedHandler);
-      if (this._runAutomatically || !this._transitionEnded.isEmpty) {
+      if (this._runAutomatically || !this._transitionEnded.isEmpty()) {
         dependency.transitionEnded.addHandler(this._transitionEndedHandler);
       }
       dependencyInfo.value = dependency.peek();
