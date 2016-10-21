@@ -39,8 +39,8 @@
     "coverage:watch": "onchange '{src,test}/**/*.js' -i -- npm run coverage",
     "lint": "eslint src test",
     "lint:watch": "onchange '{src,test}/**/*.js' -i -- npm run lint -loglevel silent",
-    "install-dependencies": "shx mv npm-shrinkwrap.json npm-shrinkwrap.no-dev.json && shx cp npm-shrinkwrap.dev.json npm-shrinkwrap.json && npm install && npm prune && shx mv npm-shrinkwrap.no-dev.json npm-shrinkwrap.json",
-    "update-dependencies": "shx mv npm-shrinkwrap.json npm-shrinkwrap.no-dev.json && ncu -u && shx rm -rf node_modules && npm install --only=prod && npm prune --production && npm shrinkwrap && npm install && npm prune && shx mv npm-shrinkwrap.json npm-shrinkwrap.no-dev.json && npm shrinkwrap --dev && shx mv npm-shrinkwrap.json npm-shrinkwrap.dev.json && shx mv npm-shrinkwrap.no-dev.json npm-shrinkwrap.json",
+    "install-dependencies": "shx mv npm-shrinkwrap.json npm-shrinkwrap.no-dev.json && shx cp npm-shrinkwrap.dev.json npm-shrinkwrap.json && npm install --cache-min 9999999 && npm prune && shx mv npm-shrinkwrap.no-dev.json npm-shrinkwrap.json",
+    "update-dependencies": "shx mv npm-shrinkwrap.json npm-shrinkwrap.no-dev.json && ncu -u && shx rm -rf node_modules && npm install --cache-min 9999999 --only=prod && npm prune --production && npm shrinkwrap && npm install --cache-min 9999999 && npm prune && shx mv npm-shrinkwrap.json npm-shrinkwrap.no-dev.json && npm shrinkwrap --dev && shx mv npm-shrinkwrap.json npm-shrinkwrap.dev.json && shx mv npm-shrinkwrap.no-dev.json npm-shrinkwrap.json",
     "validate": "npm run install-dependencies && parallelshell 'npm run lint' 'npm run test' && echo '✔ all success'",
     "validate:pretty": "parallelshell 'npm run lint' 'npm run test:pretty' && echo '✔ all success\\a' || (echo '✘ some error\\a'; sleep 0.2; echo '\\a')",
     "validate:watch": "onchange '{src,test}/**/*.js' -i -- npm run validate -loglevel silent",
@@ -96,5 +96,5 @@
     "sourceMap": true,
     "instrument": true
   },
-  "version": "6.0.1"
+  "version": "6.0.2"
 }
