@@ -15,7 +15,7 @@
       "name": "Testen mit node",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceRoot}/test/consistentObservable.js",
+      "program": "${workspaceRoot}/build/test/consistentObservable.js",
       "stopOnEntry": false,
       "args": [],
       "cwd": "${workspaceRoot}/build",
@@ -25,8 +25,8 @@
       "env": {
         "NODE_ENV": "development"
       },
-      "externalConsole": false,
-      "sourceMaps": true,
+      "console": "integratedTerminal",
+      "sourceMaps": false,
       "outDir": "${workspaceRoot}/build",
       "smartStep": true
     }
