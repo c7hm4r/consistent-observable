@@ -15,7 +15,7 @@
     "update",
     "atomic"
   ],
-  "homepage": "https://github.com/2i/consistent-observables",
+  "homepage": "https://github.com/c7hm4r/consistent-observables",
   "ignore": [
     "**/.*",
     "node_modules",

@@ -5183,8 +5183,8 @@
     },
     "parallelshell": {
       "version": "2.1.0",
-      "from": "2i/parallelshell#v2.1.0",
-      "resolved": "git://github.com/2i/parallelshell.git#b2991a6ad5cca08b818c1feb685d979c7edce462",
+      "from": "c7hm4r/parallelshell#v2.1.0",
+      "resolved": "git://github.com/c7hm4r/parallelshell.git#b2991a6ad5cca08b818c1feb685d979c7edce462",
       "dev": true
     },
     "parse-glob": {

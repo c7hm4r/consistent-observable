@@ -2,7 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/consistent-observable.svg)](https://www.npmjs.com/package/consistent-observable)
 [![license](https://img.shields.io/npm/l/consistent-observable.svg)](https://opensource.org/licenses/ISC)
-[![github-issues](https://img.shields.io/github/issues/2i/consistent-observable.svg)](https://github.com/2i/consistent-observable/issues)
+[![github-issues](https://img.shields.io/github/issues/c7hm4r/consistent-observable.svg)](https://github.com/c7hm4r/consistent-observable/issues)
 
 Little framework for simplifying reaction to values changing over time.
 
@@ -16,7 +16,7 @@ Little framework for simplifying reaction to values changing over time.
   ```bash
   bower install -S consistent-observable
   ```
-- Manual download: [consistent-observable](https://raw.githubusercontent.com/2i/consistent-observable/master/dist/lib/consistentObservable.js) and dependency [one-time-event](https://raw.githubusercontent.com/2i/one-time-event/89c65ecf616a0d47ac85d57b28e43d200dfba459/oneTimeEvent.es5.js)
+- Manual download: [consistent-observable](https://raw.githubusercontent.com/c7hm4r/consistent-observable/master/dist/lib/consistentObservable.js) and dependency [one-time-event](https://raw.githubusercontent.com/c7hm4r/one-time-event/89c65ecf616a0d47ac85d57b28e43d200dfba459/oneTimeEvent.es5.js)
 
 Together with its dependency, `consistent-observable` requires the following ES2015 features:
 
@@ -89,7 +89,7 @@ One target of the implementation of `consistent-observable` has been to minimize
 
 ## Contributing
 
-If you want to build the project or run the tests, please overwrite `npm-shrinkwrap.json` by `npm-shrinkwrap.dev.json`. Then run `npm i`. That is a work around for the multiple problems npm currently has with its npm-shrinkwrap.json files and dev dependencies (https://github.com/npm/npm/issues/6298).
+If you want to build the project or run the tests, please overwrite `npm-shrinkwrap.json` by `npm-shrinkwrap.dev.json`. Then run `npm i`. That is a work around for the multiple problems npm currently has with its npm-shrinkwrap.json files and dev dependencies ([https://github.com/npm/npm/issues/6298](https://github.com/npm/npm/issues/6298)).
 
 Build command: `npm run rebuild`
 
@@ -97,7 +97,7 @@ Test command: `npm run test`
 
 Coverage command: `npm run coverage`
 
-https://github.com/2i/consistent-observable
+[https://github.com/c7hm4r/consistent-observable](https://github.com/c7hm4r/consistent-observable)
 
 ## License
 
