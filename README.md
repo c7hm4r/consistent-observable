@@ -99,6 +99,12 @@ Coverage command: `npm run coverage`
 
 [https://github.com/c7hm4r/consistent-observable](https://github.com/c7hm4r/consistent-observable)
 
+## Similar projects
+
+Sometimes you just don’t find the right words to put into the search engines…
+
+- [`mobx`](https://github.com/mobxjs/mobx)
+
 ## License
 
 Copyright (c) 2016, Christoph Müller <iblzm@hotmail.de>
