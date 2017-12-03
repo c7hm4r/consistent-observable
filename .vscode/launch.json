@@ -27,7 +27,7 @@
       },
       "console": "integratedTerminal",
       "sourceMaps": false,
-      "outDir": "${workspaceRoot}/build",
+      "outFiles": ["${workspaceRoot}/build"],
       "smartStep": true
     }
   ]

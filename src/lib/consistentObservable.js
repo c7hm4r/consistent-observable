@@ -78,9 +78,9 @@ export const addROWrapper = (baseObservable) => {
 
 export class Action {
   constructor(
-      action /* (recorder) */,
-      cleanup /* (isFinal) */,
-      runAutomatically = true) {
+    action /* (recorder) */,
+    cleanup /* (isFinal) */,
+    runAutomatically = true) {
     this._cleanup = cleanup;
     this._action = action;
     this._runAutomatically = runAutomatically;
@@ -92,7 +92,7 @@ export class Action {
     this._baseChangedHandler = this._handleDependencyBaseChanged.bind(this);
 
     this._transitionEnded = newOneTimeEvent(
-        this._startListeningForTransitionEnd.bind(this));
+      this._startListeningForTransitionEnd.bind(this));
     this.transitionEnded = this._transitionEnded.pub;
     this._transitionEndedHandler = this._handleTransitionEnd.bind(this);
 
@@ -231,7 +231,7 @@ export class Action {
       }
       const currentValue = dependency.peek();
       if (!this._runTwiceAfterLastTransition &&
-          !Action._hasSingleDependencyChanged(dependencyInfo, currentValue)) {
+        !Action._hasSingleDependencyChanged(dependencyInfo, currentValue)) {
         dependencyInfo.baseChanged = false;
         dependency.baseChanged.addHandler(this._baseChangedHandler);
         dependency.transitionEnded.addHandler(this._transitionEndedHandler);
@@ -335,5 +335,5 @@ export const inTransition = (operation, parentTransition) => {
 
 export const isObservable = (observable) => {
   return observable && observable.transitionEnded &&
-      observable.peek && observable.baseChanged;
+    observable.peek && observable.baseChanged;
 };

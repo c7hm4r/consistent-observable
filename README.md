@@ -55,7 +55,7 @@ A “consistent observable” is an object which represents a value which may ch
     return r(task) + ' == ' + r(solution);
   });
 
-  console.log(together.peek()); // Logs '6 * 7 == 42'
+  console.log(equation.peek()); // Logs '6 * 7 == 42'
   ```
 
   Note the recording function `r`. It is required because the `ComputedObservable` needs to track which consistent observable it depends on.
@@ -64,7 +64,7 @@ Futhermore there are `Action`s, which—like `ComputedObservable`s—depend on a
 
 ```JavaScript
 var logger = co.newAction(function (r) {
-  console.log('This is true: ' + r(together));
+  console.log('This is true: ' + r(equation));
 }); // Logs 'This is true: 6 * 7 == 42'.
 ```
 
@@ -89,21 +89,19 @@ One target of the implementation of `consistent-observable` has been to minimize
 
 ## Contributing
 
-If you want to build the project or run the tests, please overwrite `npm-shrinkwrap.json` by `npm-shrinkwrap.dev.json`. Then run `npm i`. That is a work around for the multiple problems npm currently has with its npm-shrinkwrap.json files and dev dependencies ([https://github.com/npm/npm/issues/6298](https://github.com/npm/npm/issues/6298)).
+Use [Yarn](https://yarnpkg.com/) for reproducible builds.
 
-Build command: `npm run rebuild`
+Build command: `npm run rebuild` (or `yarn run rebuild`)
 
-Test command: `npm run test`
+Test command: `npm run test` (or `yarn run test`)
 
-Coverage command: `npm run coverage`
+Coverage command: `npm run coverage` (or `yarn run coverage`)
 
 [https://github.com/c7hm4r/consistent-observable](https://github.com/c7hm4r/consistent-observable)
 
 ## Similar projects
 
-Sometimes you just don’t find the right words to put into the search engines…
-
-- [`mobx`](https://github.com/mobxjs/mobx)
+[`mobx`](https://github.com/mobxjs/mobx) is a faster implementation then `consistentObservable` (see [comparison](https://github.com/c7hm4r/mobx-vs-co)). However, the runtime complexity of both packages seems to be the same. `mobx` it is larger (144KB minified) than `consistentObservable` (9KB minified, inclusive `one-time-event`).
 
 ## License
 

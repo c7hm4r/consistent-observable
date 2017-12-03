@@ -266,9 +266,12 @@
 
         try {
           for (var _iterator = this._dependencyInfos[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var _step$value = _slicedToArray(_step.value, 2),
-                dependency = _step$value[0],
-                dependencyInfo = _step$value[1];
+            var _ref = _step.value;
+
+            var _ref2 = _slicedToArray(_ref, 2);
+
+            var dependency = _ref2[0];
+            var dependencyInfo = _ref2[1];
 
             if (dependencyInfo.equalss.size === 0) {
               this._dependencyInfos.delete(dependency);
@@ -322,9 +325,12 @@
 
           try {
             for (var _iterator2 = this._dependencyInfos[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-              var _step2$value = _slicedToArray(_step2.value, 2),
-                  dependency = _step2$value[0],
-                  dependencyInfo = _step2$value[1];
+              var _ref3 = _step2.value;
+
+              var _ref4 = _slicedToArray(_ref3, 2);
+
+              var dependency = _ref4[0];
+              var dependencyInfo = _ref4[1];
 
               dependency.baseChanged.removeHandler(this._baseChangedHandler);
               dependency.transitionEnded.removeHandler(this._transitionEndedHandler);
@@ -409,9 +415,12 @@
 
         try {
           for (var _iterator4 = this._dependencyInfos[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-            var _step4$value = _slicedToArray(_step4.value, 2),
-                dependency = _step4$value[0],
-                dependencyInfo = _step4$value[1];
+            var _ref5 = _step4.value;
+
+            var _ref6 = _slicedToArray(_ref5, 2);
+
+            var dependency = _ref6[0];
+            var dependencyInfo = _ref6[1];
 
             if (dependencyInfo.baseChanged) {
               var currentValue = dependency.peek();
