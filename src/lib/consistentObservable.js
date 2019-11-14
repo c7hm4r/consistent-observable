@@ -129,8 +129,8 @@ export class Action {
     this._clean = false;
     this._invalidated = false;
     this._hasBaseChanged = false;
-    for (const [dependency, dependencyInfo] of this._dependencyInfos) {
-      if (dependencyInfo.equalss.size === 0) {
+    for (const dependency of Array.from(Object.keys(this._dependencyInfos))) {
+      if (this._dependencyInfos[dependency].equalss.size === 0) {
         this._dependencyInfos.delete(dependency);
       }
     }
