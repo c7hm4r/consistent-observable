@@ -265,15 +265,10 @@
         var _iteratorError = undefined;
 
         try {
-          for (var _iterator = this._dependencyInfos[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var _ref = _step.value;
+          for (var _iterator = Array.from(Object.keys(this._dependencyInfos))[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var dependency = _step.value;
 
-            var _ref2 = _slicedToArray(_ref, 2);
-
-            var dependency = _ref2[0];
-            var dependencyInfo = _ref2[1];
-
-            if (dependencyInfo.equalss.size === 0) {
+            if (this._dependencyInfos[dependency].equalss.size === 0) {
               this._dependencyInfos.delete(dependency);
             }
           }
@@ -325,12 +320,12 @@
 
           try {
             for (var _iterator2 = this._dependencyInfos[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-              var _ref3 = _step2.value;
+              var _ref = _step2.value;
 
-              var _ref4 = _slicedToArray(_ref3, 2);
+              var _ref2 = _slicedToArray(_ref, 2);
 
-              var dependency = _ref4[0];
-              var dependencyInfo = _ref4[1];
+              var dependency = _ref2[0];
+              var dependencyInfo = _ref2[1];
 
               dependency.baseChanged.removeHandler(this._baseChangedHandler);
               dependency.transitionEnded.removeHandler(this._transitionEndedHandler);
@@ -415,12 +410,12 @@
 
         try {
           for (var _iterator4 = this._dependencyInfos[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-            var _ref5 = _step4.value;
+            var _ref3 = _step4.value;
 
-            var _ref6 = _slicedToArray(_ref5, 2);
+            var _ref4 = _slicedToArray(_ref3, 2);
 
-            var dependency = _ref6[0];
-            var dependencyInfo = _ref6[1];
+            var dependency = _ref4[0];
+            var dependencyInfo = _ref4[1];
 
             if (dependencyInfo.baseChanged) {
               var currentValue = dependency.peek();
