@@ -69,17 +69,17 @@
     "babel-plugin-transform-function-bind": "^6.22.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
-    "concurrently": "^5.1.0",
-    "cz-conventional-changelog": "^3.1.0",
-    "eslint": "^6.8.0",
+    "concurrently": "^5.2.0",
+    "cz-conventional-changelog": "^3.2.0",
+    "eslint": "^7.4.0",
     "faucet": "^0.0.1",
-    "npm-check-updates": "^4.0.4",
-    "nyc": "^15.0.0",
-    "onchange": "^6.1.0",
+    "npm-check-updates": "^7.0.1",
+    "nyc": "^15.1.0",
+    "onchange": "^7.0.2",
     "pre-commit": "^1.2.2",
     "shx": "^0.3.2",
     "tap-nyan": "^1.1.0",
-    "tape": "^4.13.2"
+    "tape": "^5.0.1"
   },
   "config": {
     "commitizen": {
